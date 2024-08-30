@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Normalize } from 'styled-normalize';
+import { CenteredLayout } from './layouts/CenteredLayout';
+import { URLShortener } from './containers/URLShortener/URLShortener';
+import { createGlobalStyle } from 'styled-components';
+import { Footer } from './components/Footer';
+import { ReactQueryProvider } from './providers/ReactQueryProvider';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: Nunito, Helvetica, Sans-Serif;
+    background: #141E30;
+    background: -webkit-linear-gradient(225deg, #243B55, #141E30);
+    background: linear-gradient(225deg, #243B55, #141E30);
+    color: white;
+  }
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ReactQueryProvider>
+      <Normalize />
+      <GlobalStyle />
+      <CenteredLayout>
+        <URLShortener />
+        <Footer />
+      </CenteredLayout>
+    </ReactQueryProvider>
+  );
 }
 
-export default App
+export default App;
