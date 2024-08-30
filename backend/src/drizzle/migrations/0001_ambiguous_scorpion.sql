@@ -1,0 +1,1 @@
+ALTER TABLE "short_urls" ADD COLUMN "short_code" text NOT NULL;

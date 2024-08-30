@@ -1,0 +1,1 @@
+ALTER TABLE "urls_count" ALTER COLUMN "value" SET DEFAULT '0'::bigint;

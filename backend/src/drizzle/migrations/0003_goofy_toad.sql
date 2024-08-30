@@ -1,0 +1,1 @@
+ALTER TABLE "short_urls" ADD COLUMN "created_at" date DEFAULT now() NOT NULL;

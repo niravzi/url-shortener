@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "original_url_idx" ON "short_urls" USING btree ("original_url");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "short_code_idx" ON "short_urls" USING btree ("short_code");

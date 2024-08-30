@@ -15,7 +15,7 @@ export const DRIZZLE_PROVIDER = 'DrizzleProvider';
         const connectionString = configService.get<string>('DATABASE_URL');
         const pool = new Pool({
           connectionString,
-          ssl: true,
+          ssl: false,
         });
 
         return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
