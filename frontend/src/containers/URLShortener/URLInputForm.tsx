@@ -20,6 +20,8 @@ export const URLInputForm = ({ url, isLoading, isError, onChange, onGenerateClic
   const [valid, setValid] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const showError = (isError || !valid) && !!url;
+
   useEffect(() => {
     if (inputRef.current && !url) {
       inputRef.current.focus();
@@ -67,7 +69,7 @@ export const URLInputForm = ({ url, isLoading, isError, onChange, onGenerateClic
           />
           <Button type="submit" disabled={isLoading || !valid}>Shorten URL</Button>
         </Flex>
-        {(!valid || isError) && !!url && <ErrorLabel>Invalid URL</ErrorLabel>}
+        {showError && <ErrorLabel>Invalid URL</ErrorLabel>}
       </Flex>
     </Form>
   );
