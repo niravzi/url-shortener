@@ -6,7 +6,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/main.js",
+      "dest": "dist/src/main.js",
       "methods": ["GET", "POST", "OPTIONS"]
     }
   ]
