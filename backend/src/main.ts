@@ -10,6 +10,9 @@ async function bootstrap() {
   app.enableCors({
     origin: configService.get('FRONTEND_URL'),
     methods: ['GET', 'POST', 'OPTIONS'],
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type'],
+    exposedHeaders: ['Content-Type'],
   });
 
   app.useGlobalPipes(new ValidationPipe());
