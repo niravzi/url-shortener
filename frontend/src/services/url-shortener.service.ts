@@ -2,7 +2,6 @@ import { ShortUrlResponse } from '../types/ShortUrlResponse';
 
 const createShortUrl = async (url: string): Promise<ShortUrlResponse> => {
   const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}`, {
-    mode: 'cors',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

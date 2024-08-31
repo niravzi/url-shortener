@@ -1,11 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from './pipes/validation.pipe';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
-  app.enableCors();
+  app.enableCors({
+    origin: configService.get('FRONTEND_URL'),
+    methods: ['POST', 'GET', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'X-Requested-With', 'Accept'],
+  });
 
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
