@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { DRIZZLE_PROVIDER } from '../drizzle/drizzle.module';
+import { Database, DRIZZLE_PROVIDER } from '../drizzle/drizzle.module';
 import * as schema from '../drizzle/schema';
 import { ShortCodeGeneratorService } from './short-code-generator.service';
 import { eq } from 'drizzle-orm';
@@ -12,13 +11,13 @@ const CACHE_TTL = 60 * 1000;
 @Injectable()
 export class URLShortenerService {
   constructor(
-    @Inject(DRIZZLE_PROVIDER) private db: NodePgDatabase<typeof schema>,
+    @Inject(DRIZZLE_PROVIDER) private db: Database,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly shortCodeGeneratorService: ShortCodeGeneratorService,
   ) {}
 
   async createShortUrl(originalUrl: string): Promise<ShortUrlResponseDto> {
-    const existingUrls = await this.db
+    const existingUrls = await this.db.drizzle
       .select()
       .from(schema.shortUrls)
       .where(eq(schema.shortUrls.originalUrl, originalUrl))
@@ -32,14 +31,14 @@ export class URLShortenerService {
       };
     }
 
-    return this.db.transaction(async (trx) => {
+    return this.db.drizzle.transaction(async (trx) => {
       const [urlsCount] = await trx.select().from(schema.urlsCount).limit(1);
 
       const shortCode = this.shortCodeGeneratorService.generateShortCode(
         urlsCount.value,
       );
 
-      const [createdUrl] = await this.db
+      const [createdUrl] = await this.db.drizzle
         .insert(schema.shortUrls)
         .values({
           originalUrl,
@@ -47,7 +46,7 @@ export class URLShortenerService {
         })
         .returning();
 
-      await this.db
+      await this.db.drizzle
         .update(schema.urlsCount)
         .set({ value: urlsCount.value + BigInt(1) });
 
@@ -64,7 +63,7 @@ export class URLShortenerService {
       return cached;
     }
 
-    const existingUrls = await this.db
+    const existingUrls = await this.db.drizzle
       .select()
       .from(schema.shortUrls)
       .where(eq(schema.shortUrls.shortCode, shortCode))

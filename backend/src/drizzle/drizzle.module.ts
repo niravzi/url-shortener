@@ -1,10 +1,15 @@
 import { Pool } from 'pg';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as schema from './schema';
 
 export const DRIZZLE_PROVIDER = 'DrizzleProvider';
+
+export interface Database {
+  drizzle: NodePgDatabase<typeof schema>;
+  pgPool: Pool;
+}
 
 @Module({
   providers: [
@@ -18,10 +23,19 @@ export const DRIZZLE_PROVIDER = 'DrizzleProvider';
           ssl: false,
         });
 
-        return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
+        return {
+          drizzle: drizzle(pool, { schema }) as NodePgDatabase<typeof schema>,
+          pgPool: pool,
+        } as Database;
       },
     },
   ],
   exports: [DRIZZLE_PROVIDER],
 })
-export class DrizzleModule {}
+export class DrizzleModule {
+  constructor(@Inject(DRIZZLE_PROVIDER) private db: Database) {}
+
+  async onModuleDestroy() {
+    await this.db.pgPool.end();
+  }
+}

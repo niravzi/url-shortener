@@ -3,19 +3,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { URLVisitEvent } from '../events/url-visit.event';
 import { URLShortenerEvent } from '../events';
-import { DRIZZLE_PROVIDER } from '../../drizzle/drizzle.module';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { Database, DRIZZLE_PROVIDER } from '../../drizzle/drizzle.module';
 import * as schema from '../../drizzle/schema';
 
 @Injectable()
 export class URLVisitListener {
-  constructor(
-    @Inject(DRIZZLE_PROVIDER) private db: NodePgDatabase<typeof schema>,
-  ) {}
+  constructor(@Inject(DRIZZLE_PROVIDER) private db: Database) {}
 
   @OnEvent(URLShortenerEvent.URLVisited)
   async handleOrderCreatedEvent(event: URLVisitEvent) {
-    const [shortUrl] = await this.db
+    const [shortUrl] = await this.db.drizzle
       .select()
       .from(schema.shortUrls)
       .where(eq(schema.shortUrls.shortCode, event.shortCode))
@@ -25,7 +22,7 @@ export class URLVisitListener {
       return;
     }
 
-    await this.db
+    await this.db.drizzle
       .update(schema.shortUrls)
       // @ts-expect-error: https://github.com/drizzle-team/drizzle-orm/issues/2654
       .set({ visits: shortUrl.visits + 1 })
