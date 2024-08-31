@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 
-interface CardProps {
-  $minWidth?: number;
-}
-
-export const Card = styled.div<CardProps>`
+export const Card = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,6 +13,4 @@ export const Card = styled.div<CardProps>`
   border-radius: 12px;
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.3);
-  width: auto;
-  min-width: ${(props) => props.$minWidth === undefined ? 'auto' : `${props.$minWidth}px`}
 `;

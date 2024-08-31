@@ -27,7 +27,7 @@ export const URLShortener = () => {
   };
 
   return (
-    <Card $minWidth={600}>
+    <Card>
       <Header>
         {isSuccess ? 'There you go!' : 'Paste URL to be shortened'}
       </Header>

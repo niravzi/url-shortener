@@ -16,6 +16,7 @@ const GAP_SIZE: Record<Gap, string> = {
 
 export const Flex = styled.div<FlexProps>`
   display: flex;
+  flex-wrap: wrap;
   width: ${(props) => props.$fullWidth ? '100%' : 'auto'};
   flex-grow: ${(props) => props.$fullWidth ? 1 : 'auto'};
   align-items: center;
