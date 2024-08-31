@@ -9,6 +9,10 @@ export class ShortCodeGeneratorService {
   constructor() {}
 
   generateShortCode(codesCount: bigint) {
+    if (codesCount < 0) {
+      throw new RangeError('codesCount cannot be negative');
+    }
+
     const base = BigInt(ALPHABET.length);
     let base64Code = '';
     let radix: bigint;
