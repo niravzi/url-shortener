@@ -12,4 +12,5 @@ export function mainConfig(app: INestApplication) {
   });
 
   app.useGlobalPipes(new ValidationPipe());
+  app.enableShutdownHooks();
 }
