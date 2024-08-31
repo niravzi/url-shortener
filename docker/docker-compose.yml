@@ -2,12 +2,21 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: url-shortener-postgres
+    hostname: postgres
     ports:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=admin
       - POSTGRES_DB=url_shortener
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U admin -d url_shortener']
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    networks:
+      - dbnet
 
   backend:
     build:
@@ -21,7 +30,10 @@ services:
     ports:
       - 8080:3000
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    networks:
+      - dbnet
 
   frontend:
     build:
@@ -34,3 +46,6 @@ services:
       - 3000:3000
     depends_on:
       - backend
+networks:
+  dbnet:
+    name: shared-db-network
