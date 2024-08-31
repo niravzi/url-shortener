@@ -2,14 +2,10 @@
 
 ## Links
 
----
-
 Production: https://url.oriolus.io  
 Development: https://url-shortener-frontend-one.vercel.app
 
 ## Project start
-
----
 
 ### Start in development mode
 
