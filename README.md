@@ -2,8 +2,7 @@
 
 ## Links
 
-Production: https://url.oriolus.io  
-Development: https://url-shortener-frontend-one.vercel.app
+https://url.oriolus.io
 
 ## Project start
 

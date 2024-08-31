@@ -5,11 +5,15 @@ import * as schema from '../drizzle/schema';
 import { ShortCodeGeneratorService } from './short-code-generator.service';
 import { eq } from 'drizzle-orm';
 import { ShortUrlResponseDto } from './dto/short-url-response.dto';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
+
+const CACHE_TTL = 60 * 1000;
 
 @Injectable()
 export class URLShortenerService {
   constructor(
     @Inject(DRIZZLE_PROVIDER) private db: NodePgDatabase<typeof schema>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly shortCodeGeneratorService: ShortCodeGeneratorService,
   ) {}
 
@@ -54,6 +58,12 @@ export class URLShortenerService {
   }
 
   async getOriginalUrl(shortCode: string): Promise<string> {
+    const cached = await this.cacheManager.get<string>(shortCode);
+
+    if (cached) {
+      return cached;
+    }
+
     const existingUrls = await this.db
       .select()
       .from(schema.shortUrls)
@@ -65,6 +75,8 @@ export class URLShortenerService {
     }
 
     const [firstUrl] = existingUrls;
+
+    await this.cacheManager.set(shortCode, firstUrl.originalUrl, CACHE_TTL);
 
     return firstUrl.originalUrl;
   }
