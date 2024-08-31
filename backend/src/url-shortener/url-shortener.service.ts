@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { DRIZZLE_PROVIDER } from 'src/drizzle/drizzle.module';
+import { DRIZZLE_PROVIDER } from '../drizzle/drizzle.module';
 import * as schema from '../drizzle/schema';
 import { ShortCodeGeneratorService } from './short-code-generator.service';
 import { eq } from 'drizzle-orm';

@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { URLVisitEvent } from '../events/url-visit.event';
 import { URLShortenerEvent } from '../events';
-import { DRIZZLE_PROVIDER } from 'src/drizzle/drizzle.module';
+import { DRIZZLE_PROVIDER } from '../../drizzle/drizzle.module';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../../drizzle/schema';
 
